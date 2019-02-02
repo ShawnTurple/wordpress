@@ -1,0 +1,22 @@
+[req]
+req_extensions =v3_req
+distinguished_name=req_distinguished_name
+prompt = no
+
+[v3_req]
+keyUsage = keyEncipherment, dataEncipherment
+extendedKeyUsage = serverAuth
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 =  bcgov.test
+DNS.2 =  bcgov.test
+
+[req_distinguished_name]
+C=CA
+ST=British Columbia
+L=Victoria
+O=BCGOV
+OU=GCPE
+CN=bcgov.test/
+emailAddress=cdawsbmd@victoria1.gov.bc.ca/
