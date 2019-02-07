@@ -1,9 +1,10 @@
-FROM nginx:1.12.1
+FROM php:7.3-cli
 
 RUN set -ex; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
-    git zip unzip php7.0-zip curl vim libz-dev php7.0-cli php7.0-mysql php7.0-simplexml mysql-client ca-certificates less sendmail;
+    git curl openssh-client zlib1g-dev libzip-dev zip unzip mysql-client ca-certificates less sendmail; \
+    docker-php-ext-install mysqli zip
 
 ## Setus up composer
 #ENV COMPOSER_ALLOW_SUPERUSER=1
@@ -11,34 +12,30 @@ RUN set -ex; \
 RUN curl -sS https://getcomposer.org/installer | php -- \
         --filename=composer \
         --install-dir=/usr/local/bin; \
-    curl -o  /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar;\
-    mkdir -p /data/www-app/localhost ; \
-    mkdir -p /data/apps/nginx/etc; \
-    mkdir -p /data/apps/nginx/sites-enabled; \
-    mkdir -p /data/ssl/certs; \
-    mkdir -p /data/ssl/private; \
-    mv /etc/nginx /etc/.nginx && ln -s /data/apps/nginx/etc /etc/nginx; \
-    usermod -d /home/nginx -m nginx;
+    curl -o  /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar;
+
 
 #RUN cd /usr/local/bin && curl --silent --show-error https://getcomposer.org/installer | php
 WORKDIR /data/www-app
 #COPY site.conf /etc/nginx/conf.d/
 
-ADD ./codeception/.env /data/www-app/ 
-ADD ./nginx-conf/test-etc /data/apps/nginx/etc
-ADD ./nginx-conf/test-sites/ /data/apps/nginx/sites-enabled
-ADD ./ssl/certs /data/ssl/certs
-ADD ./ssl/private /data/ssl/private
-ADD docker-entrypoint.sh wordpress-install.sh /usr/local/bin/
+#ADD ./codeception/.env /data/www-app/
+ADD docker-entrypoint.sh /usr/local/bin/
 
 RUN chmod -R +x /usr/local/bin; \
-    chown  nginx /etc /data /run /usr; \
-    chmod -R 0774 /tmp /var /run /etc /mnt /data/apps/nginx; \
-    chown -R nginx /data/www-app /data/apps/nginx /var /etc/nginx /usr/local /etc/alternatives /etc/php /etc/ssl /tmp;\
-    mkdir -p /home/nginx && chown -R nginx:nginx /home/nginx && chmod -R 0751 /home/nginx; \
-    usermod -a -G www-data nginx
+    mkdir -p /var/www/.composer; \
+    chown www-data:www-data /var; \
+    chown -R www-data:www-data /data/www-app /var/www; \
+    mv /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini; \
+    sed -i -e 's/memory_limit\ =\ 128M/memory_limit\ =\ 512M/g' /usr/local/etc/php/php.ini
 
-USER nginx
+
+
+   # chmod -R 0774 /tmp /var /run /etc /mnt /data/apps/nginx; \
+   # chown -R nginx /data/www-app /var /etc/nginx /usr/local /etc/alternatives /etc/php /etc/ssl /tmp;\
+   #  mkdir -p /home/nginx && chown -R nginx:nginx /home/nginx && chmod -R 0751 /home/nginx; \
+   #  usermod -a -G www-data nginx
+
+USER www-data
 
 ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["nginx", "-g", "daemon off;"]

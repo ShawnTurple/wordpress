@@ -1,6 +1,7 @@
 # Wordpress docker container.
 
-## Features
+
+##  Features
 
 * Using Nginx and roots/bedrock to install wordpress.
 * wp (wp-cli)
