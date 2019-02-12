@@ -65,6 +65,9 @@ install_wordpress_composer() {
   BRANCH=${4-development}
   echo >&2 "Getting ${URL} configurations"
 
+  git config --global user.email "govwordpress@gov.bc.ca"
+  git config --global user.name "Gov Wordpress"
+
   mkdir -p /data/www-app/${URL} && cd /data/www-app/${URL}
   # this means no repo, so do default
   if [ ! -e /data/www-app/${URL}/composer.json ]; then
