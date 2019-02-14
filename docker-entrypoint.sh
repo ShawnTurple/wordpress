@@ -91,7 +91,7 @@ install_wordpress_composer() {
       echo >&2 "Making uploads directory"
       mkdir -p /data/www-app/${URL}/web/app/uploads
     fi
-    chmod -R 777 /data/www-app/${URL}/web/app
+    chmod -R 755 /data/www-app/${URL}/web/app
 
     echo "path: web/wp" $'\r\n'"url: ${URL} " > wp-cli.yml
 
