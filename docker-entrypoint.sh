@@ -75,7 +75,9 @@ install_wordpress_composer() {
       echo >&2 "Fetching repo ${REPO} ${BRANCH}"
   else
       git stash # just in case, which im sure something gets changed.
-      git pull origin ${BRANCH}
+      git checkout ${BRANCH}
+      git pull
+
   fi
   cd /data/www-app/${URL}
 
