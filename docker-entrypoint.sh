@@ -9,11 +9,14 @@ echo >&2 "Setting up configurations for wordpress site ${URL}"
   if [ ! -z "${WORDPRESS_REPOSITORY}" ] ; then
     wp dotenv set WP_SITEURL https://${URL}
     wp dotenv set WP_HOME https://${URL}
+    wp dotenv set DOMAIN_CURRENT_SITE https://${URL}
+
     wp dotenv set DB_NAME ${DB}
     wp dotenv set DB_USER ${MYSQL_USER-root}
     wp dotenv set DB_PASSWORD ${MYSQL_ROOT_PASSWORD-password}
     wp dotenv set DB_HOST ${MYSQL_HOST-mysql}
     wp dotenv set MULTISITE ${WORDPRESS_MULTISITE-1}
+    wp dotenv set WP_ENV development
     wp dotenv salts regenerate
   else
     cd /data/www-app/${URL}/web
