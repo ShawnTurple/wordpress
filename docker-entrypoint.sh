@@ -73,7 +73,7 @@ install_wordpress_composer() {
 
   mkdir -p /data/www-app/${URL} && cd /data/www-app/${URL}
   # this means no repo, so do default
-  if [ ! -e /data/www-app/${URL}/composer.json ]; then
+  if [ ! -e /data/www-app/${URL}/composer.json ] || [ ! -e /data/www-app/${URL}/composer-dev.json ]; then
       git clone -b ${BRANCH} ${REPO} .
       echo >&2 "Fetching repo ${REPO} ${BRANCH}"
   else
@@ -84,8 +84,15 @@ install_wordpress_composer() {
   fi
   cd /data/www-app/${URL}
 
+  ## This accounts for composer-dev files.
+  if [ -e /data/www-app/${URL}/composer-dev.json ]; then
+    COMPOSER="composer-dev.json"
+  else
+    COMPOSER="composer.json"
+  fi
 
-  if [ -e /data/www-app/${URL}/composer.json ]; then
+  if [ -e /data/www-app/${URL}/composer.json ] || [ -e /data/www-app/${URL}/composer-dev.json ]; then
+
     composer update --ignore-platform-reqs
     wp package install aaemnnosttv/wp-cli-dotenv-command:^1.0
     echo >&2 "Finished updating composer files for ${URL}"
