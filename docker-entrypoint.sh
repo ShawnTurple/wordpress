@@ -84,16 +84,16 @@ install_wordpress_composer() {
   fi
   cd /data/www-app/${URL}
 
-  ## This accounts for composer-dev files.
-  if [ -e /data/www-app/${URL}/composer-dev.json ]; then
-    COMPOSER="composer-dev.json"
-  else
-    COMPOSER="composer.json"
-  fi
+
 
   if [ -e /data/www-app/${URL}/composer.json ] || [ -e /data/www-app/${URL}/composer-dev.json ]; then
-
-    composer update --ignore-platform-reqs
+    ## This accounts for composer-dev files.
+    if [ -e /data/www-app/${URL}/composer-dev.json ]; then
+      COMPOSER="composer-dev.json" composer update --ignore-platform-reqs
+    else
+      COMPOSER="composer.json" composer update --ignore-platform-reqs
+    fi
+    
     wp package install aaemnnosttv/wp-cli-dotenv-command:^1.0
     echo >&2 "Finished updating composer files for ${URL}"
 
