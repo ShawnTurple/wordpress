@@ -73,7 +73,7 @@ install_wordpress_composer() {
 
   mkdir -p /data/www-app/${URL} && cd /data/www-app/${URL}
   # this means no repo, so do default
-  if [ ! -e /data/www-app/${URL}/composer.json ] || [ ! -e /data/www-app/${URL}/composer-dev.json ]; then
+  if [ ! -e /data/www-app/${URL}/composer.json ] && [ ! -e /data/www-app/${URL}/composer-dev.json ]; then
       git clone -b ${BRANCH} ${REPO} .
       echo >&2 "Fetching repo ${REPO} ${BRANCH}"
   else
