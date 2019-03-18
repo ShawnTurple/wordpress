@@ -3,7 +3,7 @@ FROM php:7.3-cli
 RUN set -ex; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
-    git curl openssh-client zlib1g-dev libzip-dev zip unzip mysql-client ca-certificates less sendmail; \
+    git curl openssh-client zlib1g-dev libzip-dev zip unzip  ca-certificates less ; \
     docker-php-ext-install mysqli zip
 
 ## Setus up composer
