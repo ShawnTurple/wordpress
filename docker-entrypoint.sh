@@ -32,8 +32,10 @@ echo >&2 "Setting up configurations for wordpress site ${URL}"
   #wp dotenv set DOMAIN_CURRENT_SITE https://${URL}
   # means database needs to be created.
   if [ -z "$(wp db check  --quiet)" ] ; then
-    echo >&2 "Creating database ${DB} for wordpress site ${URL}"
+    echo >&2 "Creating database ${DB} for wordpress site ${URL} "
     wp db create;
+  else
+    echo >&2 "Database already created"
   fi
 
   if ! $(wp core is-installed); then
@@ -52,6 +54,7 @@ echo >&2 "Setting up configurations for wordpress site ${URL}"
   wp core update
   wp core version
   wp core verify-checksums
+  echo >&2 "Wordpress has successfully been installed."
 }
 
 install_wordpress() {
@@ -93,7 +96,7 @@ install_wordpress_composer() {
     else
       COMPOSER="composer.json" composer update --ignore-platform-reqs
     fi
-    
+
     wp package install aaemnnosttv/wp-cli-dotenv-command:^1.0
     echo >&2 "Finished updating composer files for ${URL}"
 
