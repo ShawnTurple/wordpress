@@ -14,14 +14,14 @@ echo >&2 "Setting up configurations for wordpress site ${URL}"
     wp dotenv set DB_NAME ${DB}
     wp dotenv set DB_USER ${MYSQL_USER-root}
     wp dotenv set DB_PASSWORD ${MYSQL_ROOT_PASSWORD-password}
-    wp dotenv set DB_HOST ${MYSQL_HOST-mysql}
+    wp dotenv set DB_HOST ${MYSQL_HOST-bcgov_mysql}
     wp dotenv set MULTISITE ${WORDPRESS_MULTISITE-1}
     wp dotenv set WP_ENV development
     wp dotenv salts regenerate
   else
     cd /data/www-app/${URL}/web
     wp core download
-    wp config create --dbname=${DB} --dbuser=${MYSQL_USER-root} --dbpass=${MYSQL_ROOT_PASSWORD-password} --dbhost=${MYSQL_HOST-mysql} --skip-check
+    wp config create --dbname=${DB} --dbuser=${MYSQL_USER-root} --dbpass=${MYSQL_ROOT_PASSWORD-password} --dbhost=${MYSQL_HOST-bcgov_mysql} --skip-check
     wp config set WP_SITEURL https://${URL}
     wp config set WP_HOME https://${URL}
     if [ "${WORDPRESS_MULTISITE-1}" == 1 ]; then
